@@ -1,19 +1,20 @@
 from requests import delete
-from .filters import EnglishCensorFilter, RussianCensorFilter
+from .filters import FilterProvider, EnglishCensorFilter, RussianCensorFilter, \
+    UkrainianCensorFilter
 from .utils import delete_message, send_message
 
-ecf = EnglishCensorFilter()
-rcf = RussianCensorFilter()
+provider = FilterProvider()
+provider.register_filters(
+    EnglishCensorFilter,
+    RussianCensorFilter,
+    UkrainianCensorFilter
+)
 
 
 def message_handler(update, context):
     """Telegram bot message handler."""
-    text = censored = str(update.message.text)
-    
-    if not ecf.is_clean(censored):
-        censored = ecf.censor(censored)    
-    if not rcf.is_clean(censored):
-        censored = rcf.censor(censored)
+    text = str(update.message.text)
+    censored = provider.censore(text)
         
     if text != censored:
         from_user = update.message.from_user
