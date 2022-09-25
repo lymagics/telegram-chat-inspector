@@ -6,9 +6,10 @@ def create_bot(token):
     updater = Updater(token, use_context=True)
     
     dp = updater.dispatcher
-    from .commands import start_command, help_command
+    from .commands import start_command, help_command, updates_command
     dp.add_handler(CommandHandler("start", start_command))
     dp.add_handler(CommandHandler("help", help_command))
+    dp.add_handler(CommandHandler("new", updates_command))
     
     from .message import message_handler
     dp.add_handler(MessageHandler(Filters.text, message_handler))
