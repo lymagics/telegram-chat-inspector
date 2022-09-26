@@ -1,4 +1,3 @@
-from requests import delete
 from .filters import FilterProvider, EnglishCensorFilter, RussianCensorFilter, \
     UkrainianCensorFilter
 from .utils import delete_message, send_message

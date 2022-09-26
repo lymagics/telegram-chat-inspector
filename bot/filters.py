@@ -35,12 +35,10 @@ class FilterProvider:
 
     def censore(self, text: str, character: str="*") -> str:
         """Censore text by all registered filters."""
-        text = text.lower()
-
         for filter in self._filters:
             if not filter.is_clean(text):
                 text = filter.censor(text, character=character)
-        return ". ".join([sentence.strip().capitalize() for sentence in re.split("[.?!]", text)])
+        return text
     
     
 class EnglishCensorFilter(AbstractFilter):
@@ -50,14 +48,14 @@ class EnglishCensorFilter(AbstractFilter):
     def is_clean(text: str) -> bool:
         """Check if sentence contains swear words."""
         for word in EnglishCensorFilter._words:
-            if re.search(word, text):
+            if re.search(word, text, flags=re.I):
                 return False
         return True
     
     def censor(text: str, character: str="*") -> str:
         """Censor swear words in sentence."""
         for word in EnglishCensorFilter._words:
-            text = re.sub(word, character*len(word), text)
+            text = re.sub(word, character*len(word), text, flags=re.I)
         return text  
     
 
@@ -68,14 +66,14 @@ class RussianCensorFilter(AbstractFilter):
     def is_clean(text: str) -> bool:
         """Check if sentence contains swear words."""
         for word in RussianCensorFilter._words:
-            if re.search(word, text):
+            if re.search(word, text, flags=re.I):
                 return False
         return True
     
     def censor(text: str, character: str="*") -> str:
         """Censor swear words in sentence."""
         for word in RussianCensorFilter._words:
-            text = re.sub(word, character*len(word), text)
+            text = re.sub(word, character*len(word), text, flags=re.I)
         return text 
 
 
@@ -86,12 +84,12 @@ class UkrainianCensorFilter(AbstractFilter):
     def is_clean(text: str) -> bool:
         """Check if sentence contains swear words."""
         for word in UkrainianCensorFilter._words:
-            if re.search(word, text):
+            if re.search(word, text, flags=re.I):
                 return False
         return True
     
     def censor(text: str, character: str="*") -> str:
         """Censor swear words in sentence."""
         for word in UkrainianCensorFilter._words:
-            text = re.sub(word, character*len(word), text)
+            text = re.sub(word, character*len(word), text, flags=re.I)
         return text 
